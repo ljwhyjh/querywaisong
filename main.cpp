@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
 
     waisong w;
-    w.setWindowTitle(u8"外送样本查询v1.5 20221104");//20221102修改时间为采血登记时间
+    w.setWindowTitle(u8"外送样本查询v1.51 20221115");//20221102修改时间为采血登记时间
     w.setWindowIcon(QIcon(text));
 
     w.show();

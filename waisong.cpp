@@ -67,7 +67,8 @@ bool waisong::sqlConnection()
     QString DatabaseName= configIniRead->value("database").toString();
     QString UserName = configIniRead->value("username").toString();
     QString Password = configIniRead->value("password").toString();
-
+            deptID1  = configIniRead->value("deptID1").toString();
+            deptID2  = configIniRead->value("deptID2").toString();
 
     if(HostName=="" || UserName=="" || Password==""){
         QMessageBox::warning(this,"警告!","数据库信息错误，请检查!", QMessageBox::Yes);
@@ -218,23 +219,36 @@ void waisong::on_dateBtn_clicked()
    QString sql;
 
    //聊城
+   sql="SELECT distinct(BARCODE),PNAME, PSEX ,PAGE , CONVERT(VARCHAR(23),SAMPLETIME,120) SAMPLETIME,   descr";
+   //sql+="  = stuff((SELECT ',' + DESCR FROM v_adicon_sample t WHERE t.BARCODE = v_adicon_sample.BARCODE FOR xml path('')) , 1 , 1 , '') ";
+   sql+="  FROM (SELECT DISTINCT a.SGLCHECKID AS BARCODE,  a.NAME AS PNAME, a.SEX AS PSEX, a.AGE AS PAGE, '岁' AS PAGETYPE, a.BIRTHDATE AS BIRTHDAY, f.BRIEFNAME AS DESCR,d.CHECKDATE AS SAMPLETIME";
+   sql+=" FROM dbo.T_SINGLE_CHECKINFO AS a INNER JOIN dbo.T_SINGLE_CHECKMODULE AS d ON a.SGLCHECKID = d.SGLCHECKID INNER JOIN";
+   sql+=" dbo.T_CHECKMODULE_OUTCHECK AS b ON d.CHECKMODULEID = b.CHECKMODULEID INNER JOIN dbo.T_CHECKMODULE_CHECKITEM AS c ON b.CHECKMODULEID = c.CHECKMODULEID INNER JOIN";
+   sql+=" dbo.T_CHECKITEM AS e ON c.CHECKITEMID = e.CHECKITEMID INNER JOIN  dbo.T_CHECKMODULE AS f ON d.CHECKMODULEID = f.CHECKMODULEID";   
+   //sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN ('2520001', '2520003')) AND (a.REGISTDEPT IN ('2520001', '2520003'))) adicon_sample";
+   sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN (\'"+deptID1+"\', \'"+deptID2+"\')) AND (a.REGISTDEPT IN (\'"+deptID1+"\', \'"+deptID2+"\'))) adicon_sample";
+
+
+   //东营
+//   sql="SELECT distinct(BARCODE),PNAME, PSEX ,PAGE , CONVERT(VARCHAR(23),SAMPLETIME,120) SAMPLETIME,   descr  ";
+//   //sql+="= stuff((SELECT ',' + DESCR FROM v_adicon_sample t WHERE t.BARCODE = v_adicon_sample.BARCODE FOR xml path('')) , 1 , 1 , '')";
+//   sql+="  FROM  (SELECT DISTINCT a.SGLCHECKID AS BARCODE,  a.NAME AS PNAME, a.SEX AS PSEX, a.AGE AS PAGE, '岁' AS PAGETYPE, a.BIRTHDATE AS BIRTHDAY, f.BRIEFNAME AS DESCR,d.CHECKDATE AS SAMPLETIME";
+//   sql+=" FROM dbo.T_SINGLE_CHECKINFO AS a INNER JOIN dbo.T_SINGLE_CHECKMODULE AS d ON a.SGLCHECKID = d.SGLCHECKID INNER JOIN";
+//   sql+=" dbo.T_CHECKMODULE_OUTCHECK AS b ON d.CHECKMODULEID = b.CHECKMODULEID INNER JOIN";
+//   sql+="  dbo.T_CHECKMODULE AS f ON d.CHECKMODULEID = f.CHECKMODULEID";
+//   sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN ('2570001', '2570003')) AND (a.REGISTDEPT IN ('2570001', '2570003'))) adicon_sample";
+
+
+   //广饶
 //   sql="SELECT distinct(BARCODE),PNAME, PSEX ,PAGE , CONVERT(VARCHAR(23),SAMPLETIME,120) SAMPLETIME,   descr";
 //   //sql+="  = stuff((SELECT ',' + DESCR FROM v_adicon_sample t WHERE t.BARCODE = v_adicon_sample.BARCODE FOR xml path('')) , 1 , 1 , '') ";
 //   sql+="  FROM (SELECT DISTINCT a.SGLCHECKID AS BARCODE,  a.NAME AS PNAME, a.SEX AS PSEX, a.AGE AS PAGE, '岁' AS PAGETYPE, a.BIRTHDATE AS BIRTHDAY, f.BRIEFNAME AS DESCR,d.CHECKDATE AS SAMPLETIME";
 //   sql+=" FROM dbo.T_SINGLE_CHECKINFO AS a INNER JOIN dbo.T_SINGLE_CHECKMODULE AS d ON a.SGLCHECKID = d.SGLCHECKID INNER JOIN";
 //   sql+=" dbo.T_CHECKMODULE_OUTCHECK AS b ON d.CHECKMODULEID = b.CHECKMODULEID INNER JOIN dbo.T_CHECKMODULE_CHECKITEM AS c ON b.CHECKMODULEID = c.CHECKMODULEID INNER JOIN";
 //   sql+=" dbo.T_CHECKITEM AS e ON c.CHECKITEMID = e.CHECKITEMID INNER JOIN  dbo.T_CHECKMODULE AS f ON d.CHECKMODULEID = f.CHECKMODULEID";
-//   sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN ('2520001', '2520003')) AND (a.REGISTDEPT IN ('2520001', '2520003'))) adicon_sample";
+//   sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN ('0546001', '0546003')) AND (a.REGISTDEPT IN ('0546001', '0546003'))) adicon_sample";
 
 
-   //东营
-   sql="SELECT distinct(BARCODE),PNAME, PSEX ,PAGE , CONVERT(VARCHAR(23),SAMPLETIME,120) SAMPLETIME,   descr  ";
-   //sql+="= stuff((SELECT ',' + DESCR FROM v_adicon_sample t WHERE t.BARCODE = v_adicon_sample.BARCODE FOR xml path('')) , 1 , 1 , '')";
-   sql+="  FROM  (SELECT DISTINCT a.SGLCHECKID AS BARCODE,  a.NAME AS PNAME, a.SEX AS PSEX, a.AGE AS PAGE, '岁' AS PAGETYPE, a.BIRTHDATE AS BIRTHDAY, f.BRIEFNAME AS DESCR,d.CHECKDATE AS SAMPLETIME";
-   sql+=" FROM dbo.T_SINGLE_CHECKINFO AS a INNER JOIN dbo.T_SINGLE_CHECKMODULE AS d ON a.SGLCHECKID = d.SGLCHECKID INNER JOIN";
-   sql+=" dbo.T_CHECKMODULE_OUTCHECK AS b ON d.CHECKMODULEID = b.CHECKMODULEID INNER JOIN";
-   sql+="  dbo.T_CHECKMODULE AS f ON d.CHECKMODULEID = f.CHECKMODULEID";
-   sql+="  WHERE (d.ISCHECKED = '1') AND (b.APPLYHOSPITAL IN ('2570001', '2570003')) AND (a.REGISTDEPT IN ('2570001', '2570003'))) adicon_sample";
 
 
    if(sglid.length()!=0&&sglname.length()==0)
@@ -253,7 +267,7 @@ void waisong::on_dateBtn_clicked()
 
    total=query.numRowsAffected();
 
-   qDebug()<<total;
+   //qDebug()<<total;
 
    for(int i=0;i<total;i++)
    {
@@ -303,7 +317,7 @@ void waisong::on_dateBtn_clicked()
              }else if(val.toObject().value("barcode").toString()==query.value(0).toString()){
                  QString strDescr=val.toObject().value("descr").toString();
                  strDescr +=","+query.value(5).toString();
-                 qDebug()<<strDescr;
+                 //qDebug()<<strDescr;
                  obj["descr"]=strDescr;
                  jsonsz[jsonsz.size()-1]=obj;
              }

@@ -12,7 +12,7 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-VERSION=1.5
+VERSION=1.51
 RC_ICONS=logo.ico
 
 # You can also make your code fail to compile if it uses deprecated APIs.

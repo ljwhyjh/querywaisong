@@ -70,6 +70,7 @@ private:
     QString current_date;
     QString startDate;
     QString endDate;
+    QString deptID1,deptID2;
     int total;
     int num=0;
 
